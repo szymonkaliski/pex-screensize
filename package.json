@@ -1,6 +1,6 @@
 {
   "name": "pex-screensize",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Screen size module for pex library",
   "keywords": [
     "pex",
