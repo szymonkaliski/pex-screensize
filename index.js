@@ -1,18 +1,44 @@
-/*global window */
+/*global window, document */
 
 var exec = require("child_process").exec;
 
+var ScreenSizeOSX = function(callback) {
+  exec("system_profiler SPDisplaysDataType", function(error, stdout) {
+    if (error) { return callback(error); }
+
+    var resolutions = stdout.split("\n").filter(function(line) {
+      return line.match("Resolution");
+    });
+
+    resolutions = resolutions.map(function(resolution) {
+      var temp = resolution.replace(/[^0-9]+/, "").split(" ");
+      return { width: temp[0], height: temp[2] };
+    });
+
+    return callback(null, resolutions);
+  });
+};
+
+var ScreenSizeBrowser = function(callback) {
+  var size = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+
+  callback(null, [ size ]);
+};
+
 function ScreenSize() {
-  var isPlask = typeof window === "undefined" && typeof process === "object";
+  var isPlask = window === undefined && typeof process === "object";
   var isBrowser = typeof window === "object" && typeof document === "object";
 
   if (isPlask) {
     this.type = "plask";
   }
-  else {
+  else if (isBrowser) {
     this.type = "browser";
   }
-};
+}
 
 ScreenSize.prototype.screens = function(callback) {
   var typeMap = {
@@ -36,7 +62,7 @@ ScreenSize.prototype.fullscreenSettings = function(callback, num) {
       num = 0;
     }
     else {
-      num = Math.min(num, screens.length);
+      num = Math.min(num, screens.length - 1);
     }
 
     var screen = screens[num];
@@ -63,32 +89,6 @@ ScreenSize.prototype.fullscreenSettings = function(callback, num) {
 
     callback(null, screenMap[this.type]);
   }.bind(this));
-};
-
-var ScreenSizeOSX = function(callback) {
-  exec("system_profiler SPDisplaysDataType", function(error, stdout) {
-    if (error) { return callback(error); }
-
-    var resolutions = stdout.split("\n").filter(function(line) {
-      return line.match("Resolution");
-    });
-
-    resolutions = resolutions.map(function(resolution) {
-      var temp = resolution.replace(/[^0-9]+/, "").split(" ");
-      return { width: temp[0], height: temp[2] };
-    });
-
-    return callback(null, resolutions);
-  });
-};
-
-var ScreenSizeBrowser = function(callback) {
-  var size = {
-    width: window.innerWidth,
-    height: window.innerHeight
-  };
-
-  callback(null, [ size ]);
 };
 
 module.exports = ScreenSize;
