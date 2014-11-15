@@ -13,7 +13,7 @@ var Window = require("pex-sys").Window;
 
 var ScreenSize = require("pex-screensize");
 var screenSize = new ScreenSize();
-var screenNumber = 1; // optional settings for multiple monitors on OSX/Plask, defaults to 0
+var screenNumber = 1; // optional settings for multiple monitors on OSX/Plask
 
 screenSize.fullscreenSettings(function(error, settings) {
   if (error) { console.error(error); }
