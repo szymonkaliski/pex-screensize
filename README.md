@@ -1,8 +1,10 @@
 # pex-screensize
 
-Screen size module for pex library. Works in browser and with Plask on OSX.
+**pex-screensize is depracated**
 
-In OSX returns dimmensions of all attached displays, in browser returns current window width and height.
+`plask.Window` has now `screensInfo()` [deanm/plask@`d727b5c`](https://github.com/deanm/plask/commit/d727b5c3aedc7e104da122ba5f434b589f278200), and `pex-sys/Window` now implements [fullscreen on desktop](https://github.com/vorg/pex-sys/blob/master/lib/Window.js#L33).
+
+Screen size module for pex library. Works in browser and with Plask on OSX, in OSX returns dimmensions of all attached displays, in browser returns current window width and height.
 
 ## Example
 
